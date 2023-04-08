@@ -194,7 +194,6 @@ class SspanelQd(object):
         body=json.dumps(data).encode(encoding='utf-8')
         headers = {'Content-Type':'application/json'}
         re = requests.post(url,data=body,headers=headers)
-        print(re.status_code)
 
 
     def main(self):
