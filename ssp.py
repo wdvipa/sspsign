@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-//修改内容：改为青龙定时执行
+//修改内容：改为青龙定时执行 ，修改推送执行方式
 //使用方法：创建变量 名字：ssp 内容的写法：
 //机场的名字(方便看)|机场的网址(https:www.xxxx...)|第一个邮箱(用户名),密码;第二个邮箱,密码;...
 //每个机场用回车键隔开,账号用;隔开
@@ -20,9 +20,12 @@ tuserid = ""
 push_token = ""
 SKey = ""
 QKey = ""
+ktkey = ""
+msgs = ""
+datas = ""
 #检测推送
 if "fs" in os.environ:
-    fs = os.environ.get("ssp_fs")
+    fs = os.environ.get('fs')
     fss = fs.split("&")
     if("tel" in fss):
         if "ssp_telkey" in os.environ:
@@ -65,13 +68,13 @@ class SspanelQd(object):
         ###########################################
         ##############推送渠道配置区###############
         # 酷推qq推送
-        self.ktkey = ''
+        #self.ktkey = ktkey
         # Pushplus私聊推送
-        self.push_token = push_token
+        #self.push_token = push_token
         # ServerTurbo推送
-        self.SendKey = SKey
+        #self.SendKey = SKey
         # Qmsg私聊推送
-        self.QmsgKey = QKey
+        #self.QmsgKey = QKey
         # Telegram私聊推送
         self.tele_api_url = 'https://api.telegram.org'
         self.tele_bot_token = ttoken
@@ -102,7 +105,7 @@ class SspanelQd(object):
             }
 
             response = session.post(self.base_url + '/user/checkin', headers=headers, verify=False)
-            # print(response.text)
+            #print(response.text)
             msg = (response.json()).get('msg')
             print(msg)
         except:
@@ -125,6 +128,7 @@ class SspanelQd(object):
    
     def getflow(self , msg):
       pattern = re.compile('获得了(.+)MB')
+      msgs = msgs + '\n' + pattern
       if(msg == ""):
         return 0
       num = pattern.findall(msg)
@@ -134,10 +138,10 @@ class SspanelQd(object):
         return num[0]
     
     # Qmsg私聊推送
-    def Qmsg_send(self, msg):
-        if self.QmsgKey == '':
+    def Qmsg_send(msg):
+        if QKey == '':
             return
-        qmsg_url = 'https://qmsg.zendee.cn/send/' + str(self.QmsgKey)
+        qmsg_url = 'https://qmsg.zendee.cn/send/' + str(QKey)
         data = {
             'msg': msg,
         }
@@ -145,9 +149,9 @@ class SspanelQd(object):
 
     # Server酱推送
     def server_send(self, msg):
-        if self.SendKey == '':
+        if SKey == '':
             return
-        server_url = "https://sctapi.ftqq.com/" + str(self.SendKey) + ".send"
+        server_url = "https://sctapi.ftqq.com/" + str(SKey) + ".send"
         data = {
             'text': self.name + "签到通知",
             'desp': msg
@@ -155,10 +159,10 @@ class SspanelQd(object):
         requests.post(server_url, data=data)
 
     # 酷推QQ推送
-    def kt_send(self, msg):
-        if self.ktkey == '':
+    def kt_send(msg):
+        if ktkey == '':
             return
-        kt_url = 'https://push.xuthus.cc/send/' + str(self.ktkey)
+        kt_url = 'https://push.xuthus.cc/send/' + str(ktkey)
         data = ('签到完成，点击查看详细信息~\n' + str(msg)).encode("utf-8")
         requests.post(kt_url, data=data)
 
@@ -175,10 +179,10 @@ class SspanelQd(object):
         requests.post(tele_url, data=data)
         
     # Pushplus推送
-    def pushplus_send(self,msg):
-        if self.push_token == '':
+    def pushplus_send(msg):
+        if push_token == '':
             return
-        token = self.push_token 
+        token = push_token
         title= '机场签到通知'
         content = msg
         url = 'http://www.pushplus.plus/send'
@@ -194,21 +198,14 @@ class SspanelQd(object):
 
 
     def main(self):
+        global msgs
         msg = self.checkin()
         if msg == False:
             print("网址不正确或网站禁止访问。")
             msg = self.name + "签到失败"
-            self.server_send(msg)
-            self.kt_send(msg)
-            self.Qmsg_send(msg)
-            self.tele_send(self.email+"\n"+msg)
-            self.pushplus_send(msg)
+            msgs = msgs + '\n' + msg
         else:
-            self.server_send(msg)
-            self.kt_send(msg)
-            self.Qmsg_send(self.name+"\n"+self.email+"\n"+msg)
-            self.tele_send(self.name+"\n"+self.email+"\n"+msg)
-            self.pushplus_send(msg)
+            msgs = msgs + '\n' + msg
 
 i = 0
 n = 0
@@ -230,6 +227,7 @@ while i < len(groups):
     profile = profile.split(',')
     username = profile[0]
     pswd = profile[1]
+    msgs = msgs + '\n' + "网站" + site_name + "的" + username + "签到结果"
     print( "网站" + site_name + "的第" + str(h) + "个账号开始签到")
     # print(web_site)
     # print(username)
@@ -238,3 +236,9 @@ while i < len(groups):
     run = SspanelQd(site_name, web_site ,username ,pswd)
     run.main()
     j += 1
+else:
+    #SspanelQd.server_send( msgs )
+    SspanelQd.kt_send( msgs )
+    #SspanelQd.Qmsg_send(SspanelQd.name+"\n"+SspanelQd.email+"\n"+ msgs)
+    #SspanelQd.tele_send(SspanelQd.name+"\n"+SspanelQd.email+"\n"+ msgs)
+    SspanelQd.pushplus_send( msgs )
