@@ -25,23 +25,23 @@ if "fs" in os.environ:
     fs = os.environ.get("ssp_fs")
     fss = fs.split("&")
     if("tel" in fss):
-        if "telkey" in os.environ:
-            telekey = os.environ.get("telekey")
+        if "ssp_telkey" in os.environ:
+            telekey = os.environ.get("ssp_telkey")
             telekeys = telekey.split('\n')
             ttoken = telekeys[0]
             tuserid = telekeys[1]
     if("qm" in fss):
-        if "qkey" in os.environ:
-            QKey = os.environ.get("qkey")
+        if "ssp_qkey" in os.environ:
+            QKey = os.environ.get("ssp_qkey")
     if("stb" in fss):
-        if "skey" in os.environ:
-            SKey = os.environ.get("skey")
+        if "ssp_skey" in os.environ:
+            SKey = os.environ.get("ssp_skey")
     if("push" in fss):
-        if "push" in os.environ:
-            push_token = os.environ.get("push")
+        if "ssp_push" in os.environ:
+            push_token = os.environ.get("ssp_push")
     if("kt" in fss):
-        if "ktkey" in os.environ:
-            ktkey = os.environ.get("ktkey")
+        if "ssp_ktkey" in os.environ:
+            ktkey = os.environ.get("ssp_ktkey")
 if "ssp" in os.environ:
     datas = os.environ.get("ssp")
 else:
@@ -189,7 +189,8 @@ class SspanelQd(object):
             }
         body=json.dumps(data).encode(encoding='utf-8')
         headers = {'Content-Type':'application/json'}
-        requests.post(url,data=body,headers=headers)
+        re = requests.post(url,data=body,headers=headers)
+        print(re.status_code)
 
 
     def main(self):
