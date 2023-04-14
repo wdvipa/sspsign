@@ -24,8 +24,8 @@ ktkey = ""
 msgs = ""
 datas = ""
 #检测推送
-if "fs" in os.environ:
-    fs = os.environ.get('fs')
+if "ssp_fs" in os.environ:
+    fs = os.environ.get('ssp_fs')
     fss = fs.split("&")
     if("tel" in fss):
         if "ssp_telkey" in os.environ:
