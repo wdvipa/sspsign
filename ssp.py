@@ -222,7 +222,7 @@ class SspanelQd(object):
         global msgs
         msg = self.checkin()
         if msg == False:
-            print("网址不正确或网站禁止访问。")
+            print("请检查账号密码或网址是否正确,如正确可能被禁止访问.")
             msg = self.name + "签到失败"
             msgs = msgs + '\n' + msg
         else:
