@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 //修改内容：改为青龙定时执行 ，修改推送执行方式
+//更新内容: 修复editXY详情显示，可能部分网站还不行改首字母大小写即可,新增适配Metron主题的详情显示，增加测试变量
 //使用方法：创建变量 名字：ssp 内容的写法：
 //机场的名字(方便看)|机场的网址(https:www.xxxx...)|第一个邮箱(用户名),密码;第二个邮箱,密码;...
 //每个机场用回车键隔开,账号用;隔开
@@ -15,6 +16,7 @@ import json
 requests.urllib3.disable_warnings()
 
 #初始化环境变量开头
+cs = 0
 ttoken = ""
 tuserid = ""
 push_token = ""
@@ -23,31 +25,40 @@ QKey = ""
 ktkey = ""
 msgs = ""
 datas = ""
-#检测推送
-if "ssp_fs" in os.environ:
-    fs = os.environ.get('ssp_fs')
+
+if cs == 1:
+  if "cs_ssp" in os.environ:
+    datas = os.environ.get("cs_ssp")
+  else:
+    print('您没有输入任何信息')
+    exit
+else:
+  #检测推送
+  if "fs" in os.environ:
+    fs = os.environ.get('fs')
     fss = fs.split("&")
     if("tel" in fss):
-        if "ssp_telkey" in os.environ:
-            telekey = os.environ.get("ssp_telkey")
-            telekeys = telekey.split('\n')
-            ttoken = telekeys[0]
-            tuserid = telekeys[1]
+      if "ssp_telkey" in os.environ:
+        telekey = os.environ.get("ssp_telkey")
+        telekeys = telekey.split('\n')
+        ttoken = telekeys[0]
+        tuserid = telekeys[1]
     if("qm" in fss):
-        if "ssp_qkey" in os.environ:
-            QKey = os.environ.get("ssp_qkey")
+      if "ssp_qkey" in os.environ:
+        QKey = os.environ.get("ssp_qkey")
     if("stb" in fss):
-        if "ssp_skey" in os.environ:
-            SKey = os.environ.get("ssp_skey")
+      if "ssp_skey" in os.environ:
+        SKey = os.environ.get("ssp_skey")
     if("push" in fss):
-        if "ssp_push" in os.environ:
-            push_token = os.environ.get("ssp_push")
+      if "ssp_push" in os.environ:
+        push_token = os.environ.get("ssp_push")
     if("kt" in fss):
-        if "ssp_ktkey" in os.environ:
-            ktkey = os.environ.get("ssp_ktkey")
-if "ssp" in os.environ:
+      if "ssp_ktkey" in os.environ:
+        ktkey = os.environ.get("ssp_ktkey")
+
+  if "ssp" in os.environ:
     datas = os.environ.get("ssp")
-else:
+  else:
     print('您没有输入任何信息')
     exit
 groups = datas.split('\n')
@@ -117,14 +128,25 @@ class SspanelQd(object):
         以下只适配了editXY主题
         """
         try:
-            level = re.findall(r'\["Class", "(.*?)"],', response.text)[0]
-            day = re.findall(r'\["Class_Expire", "(.*)"],', response.text)[0]
-            rest = re.findall(r'\["Unused_Traffic", "(.*?)"]', response.text)[0]
+            level = re.findall(r'\["class", "(.*?)"],', response.text)[0]
+            day = re.findall(r'\["class_expire", "(.*)"],', response.text)[0]
+            rest = re.findall(r'\["unused_traffic", "(.*?)"]', response.text)[0]
             msg = "- 今日签到信息：" + str(msg) + "\n- 用户等级：" + str(level) + "\n- 到期时间：" + str(day) + "\n- 剩余流量：" + str(rest)
             print(msg)
             return msg
         except:
-            return msg
+            """
+            以下只适配了Metron主题
+            """
+            try:
+                level = re.findall(r'\["VIP", "(.*?)"],', response.text)[0]
+                day = re.findall(r'\["VIP_Time", "(.*)"],', response.text)[0]
+                rest = re.findall(r'\["Traffic", \'(.*?)\'],', response.text)[0]
+                msg = "- 今日签到信息：" + str(msg) + "\n- 用户等级：" + str(level) + "\n- 到期时间：" + str(day) + "\n- 剩余流量：" + str(rest)
+                print(msg)
+                return msg
+            except:
+                return msg
    
     def getflow(self , msg):
       pattern = re.compile('获得了(.+)MB')
