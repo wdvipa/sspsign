@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
+//更新时间：2023/5/1
 //修改内容：改为青龙定时执行 ，修改推送执行方式
-//更新内容: 修复editXY详情显示，可能部分网站还不行改首字母大小写即可,新增适配Metron主题的详情显示，增加测试变量
+//更新内容: 增加失败重试功能，等待时间可修改cxt变量，修复editXY详情显示，可能部分网站还不行改首字母大小写即可,新增适配Metron主题的详情显示，增加测试变量
 //使用方法：创建变量 名字：ssp 内容的写法：
 //机场的名字(方便看)|机场的网址(https:www.xxxx...)|第一个邮箱(用户名),密码;第二个邮箱,密码;...
 //每个机场用回车键隔开,账号用;隔开
@@ -17,6 +18,7 @@ requests.urllib3.disable_warnings()
 
 #初始化环境变量开头
 cs = 0
+cxt = 10  #重试等待时间
 ttoken = ""
 tuserid = ""
 push_token = ""
@@ -221,11 +223,19 @@ class SspanelQd(object):
     def main(self):
         global msgs
         msg = self.checkin()
-        if msg == False:
-            print("请检查账号密码或网址是否正确,如正确可能被禁止访问.")
-            msg = self.name + "签到失败"
-            msgs = msgs + '\n' + msg
+        i = 1
+        while i<5:
+            if msg == False:
+                i = i + 1
+                msg = self.checkin()
+                print("等待"+ str(cxt) +"秒后重试,"+ str(i) +"/5次")
+                sleep(cxt)
+            else:
+                msgs = msgs + '\n' + msg
+                break
         else:
+            print("签到失败了!\n可能是网站错误,禁止访问或账号密码错误")
+            msg = self.name + "签到失败"
             msgs = msgs + '\n' + msg
 
 i = 0
