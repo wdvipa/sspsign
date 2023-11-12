@@ -13,6 +13,7 @@ import requests
 import os
 import re
 import json
+from time import sleep
 
 requests.urllib3.disable_warnings()
 
