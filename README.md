@@ -1,5 +1,5 @@
 # sspsign
-SSP机场通用签到，支持青龙，支持多网站多账号批量签到
+SSP机场通用签到，支持青龙和action，支持多网站多账号批量签到
 ## 使用方式
 `ql repo https://ghproxy.com/https://github.com/wdvipa/sspsign/raw/main/ssp.py`
 如需直接运行或不用环境变量吧文件开头的cs变量改为2即可
