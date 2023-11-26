@@ -63,9 +63,12 @@ else:
 
   if "ssp" in os.environ:
     datas = os.environ.get("ssp")
+    if datas = "":
+      print('您没有输入任何信息')
+      exit()
   else:
     print('您没有输入任何信息')
-    exit
+    exit()
 groups = datas.split('\n')
 #初始化环境变量结尾
 
@@ -249,9 +252,13 @@ while i < len(groups):
   group = groups[i]
   i += 1
   prop = group.split('|')
-  site_name = prop[0]
-  web_site = prop[1]
-  prof = prop[2]
+  try:
+    site_name = prop[0]
+    web_site = prop[1]
+    prof = prop[2]
+  except:
+    print('签到信息格式错误')
+    exit()
   profiles = prof.split(';')
   j = 0
   h = 0
