@@ -8,7 +8,7 @@ SSP机场通用签到，支持青龙，支持多网站多账号批量签到
 |数据|内容|
 |----|----|
 |名称|多机场签到|
-|链接|`https://github.com/wdvipa/sspsign.git`|
+|链接|`https://kkgithub.com/wdvipa/sspsign.git`|
 |定时类型|crontab|
 |定时规则|	2 2 28 * *|
 |白名单|ssp.py|
