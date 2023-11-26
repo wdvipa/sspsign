@@ -63,7 +63,7 @@ else:
 
   if "ssp" in os.environ:
     datas = os.environ.get("ssp")
-    if datas = "":
+    if datas == "":
       print('您没有输入任何信息')
       exit()
   else:
