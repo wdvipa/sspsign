@@ -7,7 +7,7 @@ on:
   watch:
     types: [ started ]
   schedule:
-    - cron: 0 16 * * *
+    - cron: 08 12 * * *
 jobs:
   build:
     if: ${{ github.actor == github.event.repository.owner.login || github.event_name == 'schedule' }}
