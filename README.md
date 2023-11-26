@@ -22,9 +22,9 @@ SSP机场通用签到，支持青龙和action，支持多网站多账号批量�
 | ssp_push  | Pushplus的推送token |  token  |
 | ssp_ktkey  | 酷推的key |  key  |
 | 暂不支持  | 暂不支持 |  暂不支持  |
-
-参考仓库:https://github.com/GeorgeLxw/sspauto
 ## 使用教程
 ### 青龙
 视频：https://www.bilibili.com/video/BV1bv411F7HL/
 [![](https://bb-embed.zjffun.com/embed?v=BV1jS4y1w7SW)](https://www.bilibili.com/video/BV1bv411F7HL/)
+
+参考仓库:https://github.com/GeorgeLxw/sspauto
