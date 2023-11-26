@@ -24,3 +24,7 @@ SSP机场通用签到，支持青龙，支持多网站多账号批量签到
 | 暂不支持  | 暂不支持 |  暂不支持  |
 
 参考仓库:https://github.com/GeorgeLxw/sspauto
+## 使用教程
+### 青龙
+视频：https://www.bilibili.com/video/BV1bv411F7HL/
+[![](https://bb-embed.zjffun.com/embed?v=BV1jS4y1w7SW)](https://player.bilibili.com/player.html?aid=236438842&bvid=BV1bv411F7HL&cid=1344511576&p=1)
