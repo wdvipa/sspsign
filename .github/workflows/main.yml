@@ -8,6 +8,7 @@ on:
     types: [ started ]
   schedule:
     - cron: 08 12 * * *
+  workflow_dispatch:
 jobs:
   build:
     if: ${{ github.actor == github.event.repository.owner.login || github.event_name == 'schedule' }}
